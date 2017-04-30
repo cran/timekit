@@ -12,7 +12,7 @@
 
 <meta name="author" content="Matt Dancho" />
 
-<meta name="date" content="2017-04-19" />
+<meta name="date" content="2017-04-30" />
 
 <title>Time Series Coercion Using timekit</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Time Series Coercion Using timekit</h1>
 <h4 class="author"><em>Matt Dancho</em></h4>
-<h4 class="date"><em>2017-04-19</em></h4>
+<h4 class="date"><em>2017-04-30</em></h4>
 
 
 <div id="TOC">
@@ -279,7 +279,7 @@ timekit_index &lt;-<span class="st"> </span><span class="kw">tk_index</span>(ten
 ten_year_treasury_rate_ts_timekit %&gt;%
 <span class="st">    </span><span class="kw">tk_tbl</span>(<span class="dt">index_rename =</span> <span class="st">&quot;date&quot;</span>, <span class="dt">timekit_idx =</span> <span class="ot">FALSE</span>)</code></pre></div>
 <pre><code>## # A tibble: 80 × 2
-##             date    pct
+##            index    pct
 ##    &lt;S3: yearqtr&gt;  &lt;dbl&gt;
 ## 1        1997 Q1 0.0692
 ## 2        1997 Q2 0.0651
@@ -298,7 +298,7 @@ ten_year_treasury_rate_tbl_timekit &lt;-<span class="st"> </span>ten_year_treasu
 <span class="st">    </span><span class="kw">tk_tbl</span>(<span class="dt">index_rename =</span> <span class="st">&quot;date&quot;</span>, <span class="dt">timekit_idx =</span> <span class="ot">TRUE</span>)
 ten_year_treasury_rate_tbl_timekit</code></pre></div>
 <pre><code>## # A tibble: 80 × 2
-##          date    pct
+##         index    pct
 ##        &lt;date&gt;  &lt;dbl&gt;
 ## 1  1997-03-31 0.0692
 ## 2  1997-06-30 0.0651
@@ -314,7 +314,7 @@ ten_year_treasury_rate_tbl_timekit</code></pre></div>
 <p>We can see that in this case (and in most cases) you can get the same data frame you began with.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Comparing the coerced tibble with the original tibble</span>
 <span class="kw">identical</span>(ten_year_treasury_rate_tbl_timekit, ten_year_treasury_rate_tbl)</code></pre></div>
-<pre><code>## [1] TRUE</code></pre>
+<pre><code>## [1] FALSE</code></pre>
 </div>
 </div>
 <div id="coercion-methods" class="section level1">
@@ -648,7 +648,7 @@ ten_year_treasury_rate_ts</code></pre></div>
 ## [73] 2015.00 2015.25 2015.50 2015.75 2016.00 2016.25 2016.50 2016.75</code></pre>
 <p>If we try to toggle <code>timekit_idx = TRUE</code> during coercion to <code>tbl</code> using <code>tk_tbl()</code>, we get a warning and the default regularized time series is returned.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tk_tbl</span>(ten_year_treasury_rate_ts_stats, <span class="dt">timekit_idx =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## Warning in tk_tbl.zooreg(zoo::as.zoo(data), preserve_index, index_rename, :
+<pre><code>## Warning in tk_tbl.zooreg(zoo::as.zoo(data), preserve_index, rename_index, :
 ## No `timekit index` attribute found. Using regularized index.</code></pre>
 <pre><code>## # A tibble: 80 × 2
 ##            index    pct
@@ -763,13 +763,13 @@ data_tbl &lt;-<span class="st"> </span>tibble::<span class="kw">tibble</span>(
     <span class="dt">x    =</span> <span class="kw">cumsum</span>(<span class="dv">11</span>:<span class="dv">15</span>) *<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>))
 data_tbl</code></pre></div>
 <pre><code>## # A tibble: 5 × 2
-##         date         x
-##       &lt;date&gt;     &lt;dbl&gt;
-## 1 2016-01-01  6.879486
-## 2 2016-01-02 14.384379
-## 3 2016-01-03 22.514681
-## 4 2016-01-04 31.270390
-## 5 2016-01-05 40.651507</code></pre>
+##         date          x
+##       &lt;date&gt;      &lt;dbl&gt;
+## 1 2016-01-01  -6.792565
+## 2 2016-01-02 -14.202636
+## 3 2016-01-03 -22.230214
+## 4 2016-01-04 -30.875297
+## 5 2016-01-05 -40.137886</code></pre>
 <p>Coerce to <code>ts</code> class using the <code>tk_ts()</code> function. Note that the non-numeric column “date” is being dropped, and the <code>silent = TRUE</code> hides the message.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Coerce to ts </span>
 data_ts &lt;-<span class="st"> </span><span class="kw">tk_ts</span>(data_tbl, <span class="dt">start =</span> <span class="dv">2016</span>, <span class="dt">freq =</span> <span class="dv">365</span>, <span class="dt">silent =</span> <span class="ot">TRUE</span>)
@@ -778,12 +778,12 @@ data_ts</code></pre></div>
 ## Start = c(2016, 1) 
 ## End = c(2016, 5) 
 ## Frequency = 365 
-##              x
-## [1,]  6.879486
-## [2,] 14.384379
-## [3,] 22.514681
-## [4,] 31.270390
-## [5,] 40.651507
+##               x
+## [1,]  -6.792565
+## [2,] -14.202636
+## [3,] -22.230214
+## [4,] -30.875297
+## [5,] -40.137886
 ## attr(,&quot;index&quot;)
 ## [1] 1451606400 1451692800 1451779200 1451865600 1451952000
 ## attr(,&quot;index&quot;)attr(,&quot;tzone&quot;)
@@ -806,16 +806,16 @@ data_ts</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># No need to specify order.by arg</span>
 data_xts &lt;-<span class="st"> </span><span class="kw">tk_xts</span>(data_ts)
 data_xts</code></pre></div>
-<pre><code>##                    x
-## 2016-01-01  6.879486
-## 2016-01-02 14.384379
-## 2016-01-03 22.514681
-## 2016-01-04 31.270390
-## 2016-01-05 40.651507</code></pre>
+<pre><code>##                     x
+## 2016-01-01  -6.792565
+## 2016-01-02 -14.202636
+## 2016-01-03 -22.230214
+## 2016-01-04 -30.875297
+## 2016-01-05 -40.137886</code></pre>
 <p>We can see that the <code>xts</code> structure is maintained.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(data_xts)</code></pre></div>
 <pre><code>## An 'xts' object on 2016-01-01/2016-01-05 containing:
-##   Data: num [1:5, 1] 6.88 14.38 22.51 31.27 40.65
+##   Data: num [1:5, 1] -6.79 -14.2 -22.23 -30.88 -40.14
 ##  - attr(*, &quot;dimnames&quot;)=List of 2
 ##   ..$ : NULL
 ##   ..$ : chr &quot;x&quot;
@@ -826,16 +826,16 @@ data_xts</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># No need to specify order.by arg</span>
 data_zoo &lt;-<span class="st"> </span><span class="kw">tk_zoo</span>(data_ts)
 data_zoo</code></pre></div>
-<pre><code>##                    x
-## 2016-01-01  6.879486
-## 2016-01-02 14.384379
-## 2016-01-03 22.514681
-## 2016-01-04 31.270390
-## 2016-01-05 40.651507</code></pre>
+<pre><code>##                     x
+## 2016-01-01  -6.792565
+## 2016-01-02 -14.202636
+## 2016-01-03 -22.230214
+## 2016-01-04 -30.875297
+## 2016-01-05 -40.137886</code></pre>
 <p>We can see that the <code>zoo</code> structure is maintained.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(data_zoo)</code></pre></div>
 <pre><code>## 'zoo' series from 2016-01-01 to 2016-01-05
-##   Data: num [1:5, 1] 6.88 14.38 22.51 31.27 40.65
+##   Data: num [1:5, 1] -6.79 -14.2 -22.23 -30.88 -40.14
 ##  - attr(*, &quot;dimnames&quot;)=List of 2
 ##   ..$ : chr [1:5] &quot;2016-01-01&quot; &quot;2016-01-02&quot; &quot;2016-01-03&quot; &quot;2016-01-04&quot; ...
 ##   ..$ : chr &quot;x&quot;
@@ -843,13 +843,13 @@ data_zoo</code></pre></div>
 <p>Note that <code>tbl</code> requires the <code>timekit_idx = TRUE</code> argument to specify the use of the non-regularized index.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tk_tbl</span>(data_ts, <span class="dt">timekit_idx =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## # A tibble: 5 × 2
-##        index         x
-##       &lt;date&gt;     &lt;dbl&gt;
-## 1 2016-01-01  6.879486
-## 2 2016-01-02 14.384379
-## 3 2016-01-03 22.514681
-## 4 2016-01-04 31.270390
-## 5 2016-01-05 40.651507</code></pre>
+##        index          x
+##       &lt;date&gt;      &lt;dbl&gt;
+## 1 2016-01-01  -6.792565
+## 2 2016-01-02 -14.202636
+## 3 2016-01-03 -22.230214
+## 4 2016-01-04 -30.875297
+## 5 2016-01-05 -40.137886</code></pre>
 </div>
 <div id="working-with-yearmon-and-yearqtr-index" class="section level2">
 <h2>Working with yearmon and yearqtr index</h2>
@@ -956,7 +956,7 @@ fit_arima &lt;-<span class="st"> </span>ten_year_treasury_rate_ts %&gt;%
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>
