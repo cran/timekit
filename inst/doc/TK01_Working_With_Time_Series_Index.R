@@ -96,26 +96,3 @@ tk_get_timeseries_summary(idx_yearqtr)[,1:6]
 # idx_yearqtr: Last six columns, difference summary
 tk_get_timeseries_summary(idx_yearqtr)[,7:12]
 
-## ------------------------------------------------------------------------
-# idx_date: future index, no weekday inspection, no skip values
-tk_make_future_timeseries(idx_date, 
-                          n_future = 20, 
-                          skip_values = NULL, 
-                          inspect_weekdays = FALSE
-                          )
-
-## ------------------------------------------------------------------------
-# idx_date: future index, accounting for holidays and weekends
-# Build vector of holidays in correct timeseries class using ymd()
-holidays <- c("2017-01-02", "2017-01-16") %>% ymd()
-# Create future index
-tk_make_future_timeseries(idx_date, 
-                          n_future = 20, 
-                          skip_values = holidays, 
-                          inspect_weekdays = TRUE
-                          )
-
-## ------------------------------------------------------------------------
-# idx_yearqtr: 
-tk_make_future_timeseries(idx_yearqtr, n_future = 4)
-

@@ -4,20 +4,28 @@
 \alias{tk_make_future_timeseries}
 \title{Make a future time series from an existing time series}
 \usage{
-tk_make_future_timeseries(idx, n_future, skip_values = NULL,
-  inspect_weekdays = TRUE)
+tk_make_future_timeseries(idx, n_future, inspect_weekdays = FALSE,
+  inspect_months = FALSE, skip_values = NULL, insert_values = NULL)
 }
 \arguments{
 \item{idx}{A vector of dates}
 
 \item{n_future}{Number of future observations}
 
+\item{inspect_weekdays}{Uses a logistic regression algorithm to inspect
+whether certain weekdays (e.g. weekends) should be excluded from the future dates.
+Default is \code{FALSE}.}
+
+\item{inspect_months}{Uses a logistic regression algorithm to inspect
+whether certain days of months (e.g. last two weeks of year or seasonal days)
+should be excluded from the future dates.
+Default is \code{FALSE}.}
+
 \item{skip_values}{A vector of same class as \code{idx} of timeseries
 values to skip.}
 
-\item{inspect_weekdays}{Uses a logistic regression algorithm to inspect
-whether certain weekdays (e.g. weekends) should be excluded from the future dates.
-Default is \code{TRUE}.}
+\item{insert_values}{A vector of same class as \code{idx} of timeseries
+values to insert.}
 }
 \value{
 A vector containing future dates
@@ -31,15 +39,26 @@ on the input index frequency and attributes.
 
 The argument \code{n_future} determines how many future index observations to compute.
 
-The \code{skip_values} argument can be used to pass a timeseries vector of values to skip.
-This argument is good for passing holidays or special index values that should
-be excluded from the future time series.
-The values must be the same format as the \code{idx} class.
-
-The \code{inspect_weekdays} argument applies to "daily" (scale = "day") data
+The \code{inspect_weekdays} and \code{inspect_months} arguments apply to "daily" (scale = "day") data
 (refer to \code{tk_get_timeseries_summary()} to get the index scale).
-The default is \code{TRUE}, which runs a logistic regression on the weekdays to
-determine if certain weekdays should be excluded from the future dates.
+The \code{inspect_weekdays} argument is useful in determining missing days of the week
+that occur on a weekly frequency such as every week, every other week, and so on.
+It's recommended to have at least 60 days to use this option.
+The \code{inspect_months} argument is useful in determining missing days of the month, quarter
+or year; however, the algorithm can inadvertently select incorrect dates if the pattern
+is irratic.
+For example, some holidays do not occur on the same day of each month, and
+as a result the incorrect day may be selected in certain years.
+It's recommended to always review the date results to ensure the future days match
+the user's expectations. It's recommended to have at least two years of days to use
+this option.
+
+The \code{skip_values} and \code{insert_values} arguments can be used to remove and add
+values into the series of future times. The values must be the same format as the \code{idx} class.
+The \code{skip_values} argument useful for passing holidays or special index values that should
+be excluded from the future time series.
+The \code{insert_values} argument is useful for adding values back that the algorithm may have
+excluded.
 }
 \examples{
 library(tidyquant)
@@ -64,9 +83,9 @@ holidays <- c("2017-01-02", "2017-01-16", "2017-02-20",
 # Remove holidays with skip_values, and remove weekends with inspect_weekdays = TRUE
 FB_tbl \%>\%
     tk_index() \%>\%
-    tk_make_future_timeseries(n_future         = 251,
-                              skip_values      = holidays,
-                              inspect_weekdays = TRUE)
+    tk_make_future_timeseries(n_future         = 366,
+                              inspect_weekdays = TRUE,
+                              skip_values      = holidays)
 
 # Works with regularized indexes as well
 c(2016.00, 2016.25, 2016.50, 2016.75) \%>\%
