@@ -1,8 +1,8 @@
 Package: timekit
 Type: Package
 Title: A Collection of Tools for Working with Time Series in R
-Version: 0.3.0
-Date: 2017-05-16
+Version: 0.3.1
+Date: 2017-06-28
 Authors@R: c(
     person("Matt", "Dancho", email = "mdancho@business-science.io", role = c("aut", "cre")),
     person("Davis", "Vaughan", email = "dvaughan@business-science.io", role = c("aut"))
@@ -18,20 +18,18 @@ License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Depends: R (>= 3.3.0)
-Imports: broom (>= 0.4.2), devtools (>= 1.12.0), dplyr (>= 0.5.0),
-        forcats (>= 0.2.0), forecast (>= 0.8.0), lazyeval (>= 0.2.0),
-        lubridate (>= 1.6.0), padr (>= 0.2.1), purrr (>= 0.2.2),
-        quantmod (>= 0.4-8), readr (>= 1.0.0), scales (<= 0.4.1),
-        stringi (>= 1.1.5), tibble (>= 1.2), tidyquant (>= 0.5.1),
-        tidyr (>= 0.6.1), timeSeries (>= 3022.101.2), tseries (>=
-        0.10-37), TTR (>= 0.23-1), xts (>= 0.9-7), zoo (>= 1.7-14)
-Suggests: knitr, rmarkdown, testthat, stringr, tidyverse
+Imports: devtools (>= 1.12.0), dplyr (>= 0.7.0), forecast (>= 0.8.0),
+        lazyeval (>= 0.2.0), lubridate (>= 1.6.0), padr (>= 0.3.0),
+        purrr (>= 0.2.2), readr (>= 1.0.0), stringi (>= 1.1.5), tibble
+        (>= 1.2), tidyr (>= 0.6.1), xts (>= 0.9-7), zoo (>= 1.7-14)
+Suggests: broom, forcats, knitr, rmarkdown, scales, stringr, testthat,
+        tidyverse, tidyquant
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2017-05-16 13:19:17 UTC; mdancho
+Packaged: 2017-06-28 14:27:28 UTC; mdancho
 Author: Matt Dancho [aut, cre],
   Davis Vaughan [aut]
 Maintainer: Matt Dancho <mdancho@business-science.io>
 Repository: CRAN
-Date/Publication: 2017-05-16 14:39:59 UTC
+Date/Publication: 2017-06-28 15:07:15 UTC
